@@ -21,69 +21,88 @@ function computerPlay(){
 }
 
 
-function play(playerSelection, computerSelection){
-    while (playerSelection.toLowerCase() != "rock" && playerSelection.toLowerCase() != "paper" && playerSelection.toLowerCase() != "scissors"){
-        playerSelection = prompt("Invalid input, please choose \"rock\", \"paper\", or \"scissors\"");
-
-    }
+function play(e){
+    const playerSelection = e.target.id;
+    const computerSelection = computerPlay();
+    let winner = "null";
 
     switch (playerSelection.toLowerCase()){
         case "rock":
             if (computerSelection == "Rock"){
-                return "It's a tie this round!\nYou:Rock Computer:Rock"
+                winner = "tie";
+                break;
             } else if (computerSelection == "Paper") {
-                return "You lose this round! Paper beats Rock.\nYou:Rock Computer:Paper"
+                winner = "computer";
+                break;
             } else {
-                return "You win this round! Rock beats Scissors.\nYou:Rock Computer:Scissors"
+                winner = "player";
+                break;
             }
         case "paper":
             if (computerSelection == "Rock"){
-                return "You win this round! Paper beats Rock.\nYou:Paper Computer:Rock"
+                winner = "player";
+                break;
             } else if (computerSelection == "Paper") {
-                return "It's a tie this round!\nYou:Paper Computer:Paper"
+                winner = "tie";
+                break;
             } else {
-                return "You lose this round! Scissors beats Paper.\nYou:Paper Computer:Scissors"
+                winner = "computer";
+                break;
             }
         case "scissors":
             if (computerSelection == "Rock"){
-                return "You lose this round! Rock beats Scissors.\nYou:Scissors Computer:Rock"
+                winner = "computer";
+                break;
             } else if (computerSelection == "Paper") {
-                return "You win this round! Scissors beats Paper.\nYou:Scissors Computer:Paper"
+                winner = "player";
+                break;
             } else {
-                return "It's a tie this round!\nYou:Scissors Computer:Scissors"
+                winner = "tie";
+                break;
             }
-        default:
-            return "Uh oh! Something went wrong."
+    }
+
+    updateScore(winner, playerSelection, computerSelection);
+}
+
+
+function updateScore(winner, playerSelection, computerSelection){
+    let score = document.querySelector('#score').innerText;
+    let result = document.querySelector('#results');
+    let playerScore = +score[0];
+    let computerScore = +score[4];
+
+    if (playerScore >= 5 || computerScore >= 5) {
+        playerScore = 0;
+        computerScore = 0;
+        document.body.removeChild(winnerText)
+    }
+
+    if (winner == "player"){
+        playerScore++;
+    }
+    else if (winner == "computer"){
+        computerScore++;
+    }    
+    
+    document.querySelector('#score').innerText = `${playerScore} - ${computerScore}`;
+    result.textContent = `Player: ${playerSelection}, Computer: ${computerSelection}`;
+
+    if (playerScore == 5) {
+        winnerText = document.createElement("p");
+        winnerText.innerText = "Player wins!"
+        document.body.appendChild(winnerText);
+    }
+    else if (computerScore == 5){
+        winnerText = document.createElement("p");
+        winnerText.innerText = "Computer wins!";
+        document.body.appendChild(winnerText);
     }
 }
 
 
-function game(){
-    //Player, Computer
-    let score = [0, 0];
+const selections = document.querySelectorAll('#selections');
+selections.forEach(option => option.addEventListener('click', play));
 
-    for (let i = 0; i < 5; i++){
-        result = play(prompt("Make your selection."), computerPlay());
-        if (result.includes("win")) {
-            score[0]++;
-        } else if (result.includes("lose")){
-            score[1]++;
-        } else {
-            console.log(result);
-            while (result.includes("tie")){
-                result = play(prompt("We can't have any ties! Try again."), computerPlay());
-            }
-            result.includes("win") ? score[0]++ : score[1]++;
-        }
-        console.log(result);
-    }
 
-    if (score[0] > score[1]){
-        console.log(`You won! The overall score was ${score[0]} to ${score[1]}`);
-    }
-    else {
-        console.log(`You lost this one. The overall score was ${score[0]} to ${score[1]}`);
-    }
-}
-
-game();
+//game();

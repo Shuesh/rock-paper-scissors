@@ -1,0 +1,28 @@
+* {
+    background-color: #EDFFFE;
+    text-align: center;
+}
+
+p {
+    font-weight: bold;
+    font-size: 30px;
+}
+
+div {
+    display: flex;
+    width: 85%;
+    justify-content: space-around;
+    margin: auto;
+}
+
+.option {
+    width: 20%;
+    height: auto;
+    border: 2px solid black;
+}
+
+.option:hover {
+    transform: scale(1.05);
+    border-color: yellow;
+    cursor: pointer;
+}
